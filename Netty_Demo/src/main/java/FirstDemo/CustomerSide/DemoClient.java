@@ -12,7 +12,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * 客户端启动逻辑
  */
 public class DemoClient {
-	 public static String host = "192.168.88.129"; //服务器IP地址
+	 public static String host = "192.168.1.212"; //服务器IP地址
 	    public static int port = 8000; //服务器端口
 
 	    public static void main(String[] args) throws Exception {

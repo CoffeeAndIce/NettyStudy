@@ -11,4 +11,8 @@ public class DemoClientHandler extends SimpleChannelInboundHandler<Object> {
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("Server say : " + msg.toString());
     }
+    @Override  
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {  
+      System.out.println("exception is general");  
+  }
 }
