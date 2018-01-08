@@ -6,6 +6,13 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 
+/**
+* @ClassName: OutHandler
+* @Description: 公共处理类
+* @author linge
+* @date 2018年1月8日 下午3:48:40
+*
+*/
 public class OutHandler extends ChannelOutboundHandlerAdapter{  
     @Override  
     public void connect(ChannelHandlerContext ctx,  

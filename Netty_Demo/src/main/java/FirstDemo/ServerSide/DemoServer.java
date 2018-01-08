@@ -65,7 +65,7 @@ public class DemoServer {
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 1024)
-                    .childHandler(new OutHandler())
+                    .handler(new OutHandler())
                     .childHandler(new ServerChannelInitializer());
 
             //绑定端口，同步等待成功
