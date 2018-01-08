@@ -22,13 +22,10 @@ public class DemoClient {
 	            b.group(group)
 	                    .channel(NioSocketChannel.class)
 	                    .handler(new ClientChannelInitializer());
-
 	            //连接客户端
 	            Channel channel = b.connect(host, port).sync().channel();
-	            
 	            //控制台输入
 	            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-
 	            for (;;) {
 	                String line = in.readLine();
 	                if (line == null) {

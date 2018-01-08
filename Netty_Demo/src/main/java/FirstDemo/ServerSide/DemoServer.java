@@ -1,5 +1,6 @@
 package FirstDemo.ServerSide;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Map;
@@ -37,9 +38,9 @@ public class DemoServer {
                             while (it.hasNext()) {
                                 String key = it.next();
                                 SocketChannel obj = map.get(key);
-                                System.out.println("channel id is: " + key);
-                                System.out.println("channel: " + obj.isActive());
-                                obj.writeAndFlush("hello, it is Server test header ping");
+//                                System.out.println("channel id is: " + key);
+//                                System.out.println("channel: " + obj.isActive());
+//                                obj.writeAndFlush("hello, it is Server test header ping");
                                 if(!obj.isActive()){
                                 map.remove(key);
                                 }
@@ -53,30 +54,70 @@ public class DemoServer {
                     }
             }
         };
+        Runnable input = new Runnable() {
+            public void run() {
+            	inputLoop:
+		 for(;;){
+            Map<String, SocketChannel> map = GateWayService.getChannels();
+            while(!map.isEmpty()){
+            		 //控制台输入
+            	System.out.println("选择模式\n1、选择\n2、全部");
+    	            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    	                String line;
+						try {
+							line = in.readLine();
+	    	                if (line == null) {
+	    	                    continue;
+	    	                }
+	    	        
+	    	                int num = Integer.valueOf(line);
+	    	                Iterator<String> it = map.keySet().iterator();
+	    	                int init =1;
+	    	                switch (num) {
+							case 1:
+								System.out.println("选择端口id");
+								while (it.hasNext()) {
+		                            String key = it.next();
+		                            System.out.println(init+"、 id:"+map.get(key).id()+"  //s"+map.get(key).remoteAddress());
+		                            init++;
+								}
+								String in0 = new  BufferedReader(new InputStreamReader(System.in)).readLine();
+								SocketChannel socketChannel = map.get(in0);
+							     //向服务端发送数据
+								System.out.println("输入发送信息");
+								String in1 = new  BufferedReader(new InputStreamReader(System.in)).readLine();
+								if(in1!=null){
+								socketChannel.writeAndFlush(in1);
+								}
+								break;
+							case 2:   
+							System.out.println("发送信息");
+							in = new  BufferedReader(new InputStreamReader(System.in));
+							while (it.hasNext()) {
+	                            String key = it.next();
+	                            SocketChannel obj = map.get(key);
+	    	                //向服务端发送数据
+	                            obj.writeAndFlush(line);
+	                            if(line.equals("close") || line.equals("关闭")){
+	                            	obj.disconnect();
+	                            	continue;
+	                            }
+	                        }
+								break;
+								
+							}
+						} catch (IOException e) {
+							break inputLoop;
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+            }
+            }
+            }
+        };
         new Thread(sendTask).start();
-        Map<String, SocketChannel> map = GateWayService.getChannels();
-        while(map!=null){
-        		 //控制台输入
-	            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-
-	            for (;;) {
-	                String line = in.readLine();
-	                if (line == null) {
-	                    continue;
-	                }
-	                Iterator<String> it = map.keySet().iterator();
-                    while (it.hasNext()) {
-                        String key = it.next();
-                        SocketChannel obj = map.get(key);
-	                //向服务端发送数据
-                        if(line.equals("close") || line.equals("关闭")){
-                        	obj.disconnect();
-    	                	continue;
-    	                }
-                        obj.writeAndFlush(line);
-                    }
-        }
-        }
+        new Thread(input).start();
         new DemoServer().bind(port);
     }
 
@@ -99,7 +140,6 @@ public class DemoServer {
             
             //等待服务器监听端口关闭
             f.channel().closeFuture().sync();
-            
         } finally {
             //优雅退出，释放线程池资源
             bossGroup.shutdownGracefully();

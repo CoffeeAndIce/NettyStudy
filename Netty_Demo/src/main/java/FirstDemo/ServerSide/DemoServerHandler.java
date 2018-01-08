@@ -24,7 +24,7 @@ public class DemoServerHandler extends SimpleChannelInboundHandler<Object> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("RemoteAddress : " + ctx.channel().remoteAddress() + " active !");
         ctx.writeAndFlush("连接成功！");
-        String uuid = ctx.channel().id().asLongText();
+        String uuid = ctx.channel().id().toString();
         System.out.println(uuid);
         GateWayService.addGatewayChannel(uuid, (SocketChannel)ctx.channel());
         System.out.println("a new connect come in: " + uuid);
