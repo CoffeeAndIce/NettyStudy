@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -54,9 +55,11 @@ public class CharsetDemo {
                     socketChannel.read(byteBf);
                     Charset charset = Charset.forName("utf-8");
                     byteBf.flip();
-                    System.out.println("clinet :" + charset.decode(byteBf));
+                    CharBuffer decode = charset.decode(byteBf);
+                    System.out.println("clinet :" + decode);
+                    String[] split = decode.toString().split("\\s+");
                     // socket是双通道，故也可以直接返回东西了
-                    socketChannel.write(charset.encode("test only"));
+                    socketChannel.write(charset.encode("Method:"+split[0]+"\n请求："+split[1]));
                     socketChannel.close();
                 }
 			}
