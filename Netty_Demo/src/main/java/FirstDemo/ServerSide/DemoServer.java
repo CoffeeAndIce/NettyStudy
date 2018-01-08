@@ -1,4 +1,6 @@
 package FirstDemo.ServerSide;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -29,7 +31,6 @@ public class DemoServer {
             public void run() {
                 sendTaskLoop:
                     for(;;){
-                        System.out.println("task is beginning...");
                         try{
                             Map<String, SocketChannel> map = GateWayService.getChannels();
                             Iterator<String> it = map.keySet().iterator();
@@ -53,6 +54,29 @@ public class DemoServer {
             }
         };
         new Thread(sendTask).start();
+        Map<String, SocketChannel> map = GateWayService.getChannels();
+        while(map!=null){
+        		 //控制台输入
+	            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+	            for (;;) {
+	                String line = in.readLine();
+	                if (line == null) {
+	                    continue;
+	                }
+	                Iterator<String> it = map.keySet().iterator();
+                    while (it.hasNext()) {
+                        String key = it.next();
+                        SocketChannel obj = map.get(key);
+	                //向服务端发送数据
+                        if(line.equals("close") || line.equals("关闭")){
+                        	obj.disconnect();
+    	                	continue;
+    	                }
+                        obj.writeAndFlush(line);
+                    }
+        }
+        }
         new DemoServer().bind(port);
     }
 
