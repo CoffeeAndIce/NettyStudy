@@ -11,7 +11,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
 
-public class HeartBeatClientHandler extends SimpleChannelInboundHandler {  
+public class HeartBeatClientHandler extends SimpleChannelInboundHandler<Object> {  
 	  
     private static final ByteBuf HEART_BEAT_SEQUENCE = Unpooled.unreleasableBuffer(Unpooled.copiedBuffer("心跳检测：PING...",  
             CharsetUtil.UTF_8));  

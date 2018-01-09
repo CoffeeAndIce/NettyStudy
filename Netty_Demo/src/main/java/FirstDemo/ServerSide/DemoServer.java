@@ -61,7 +61,7 @@ public class DemoServer {
             Map<String, SocketChannel> map = GateWayService.getChannels();
             while(!map.isEmpty()){
             		 //控制台输入
-            	System.out.println("选择模式\n1、选择\n2、全部");
+            	System.out.println("选择模式\n1、选择\n2、全部\n");
     	            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     	                String line;
 						try {
@@ -75,7 +75,8 @@ public class DemoServer {
 	    	                int init =1;
 	    	                switch (num) {
 							case 1:
-								System.out.println("选择端口id");
+								System.out.println("选择端口id\n");
+								
 								while (it.hasNext()) {
 		                            String key = it.next();
 		                            System.out.println(init+"、 id:"+map.get(key).id()+"  //s"+map.get(key).remoteAddress());
@@ -84,20 +85,20 @@ public class DemoServer {
 								String in0 = new  BufferedReader(new InputStreamReader(System.in)).readLine();
 								SocketChannel socketChannel = map.get(in0);
 							     //向服务端发送数据
-								System.out.println("输入发送信息");
+								System.out.println("输入发送信息\n");
 								String in1 = new  BufferedReader(new InputStreamReader(System.in)).readLine();
 								if(in1!=null){
 								socketChannel.writeAndFlush(in1);
 								}
 								break;
 							case 2:   
-							System.out.println("发送信息");
-							in = new  BufferedReader(new InputStreamReader(System.in));
+							System.out.println("发送信息\n");
+							String in2 = new  BufferedReader(new InputStreamReader(System.in)).readLine();
 							while (it.hasNext()) {
 	                            String key = it.next();
 	                            SocketChannel obj = map.get(key);
 	    	                //向服务端发送数据
-	                            obj.writeAndFlush(line);
+	                            obj.writeAndFlush(in2);
 	                            if(line.equals("close") || line.equals("关闭")){
 	                            	obj.disconnect();
 	                            	continue;
