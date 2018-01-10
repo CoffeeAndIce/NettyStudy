@@ -32,5 +32,6 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
             ctx.flush();  
         }  
         ReferenceCountUtil.release(msg);  
+        
     }  
 }  
